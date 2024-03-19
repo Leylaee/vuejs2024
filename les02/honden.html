@@ -10,11 +10,9 @@
 
 <body>
     <div id="app">
-
-        <p>Geef je naam aub.</p>
-        <input v-model="naam" size="50">
-        <p>Hallo {{naam}}</p>
-
+        <li v-for="hond in honden">
+            {{hond.naam}}
+        </li>
     </div>
 
 
@@ -23,7 +21,13 @@
 
             data() {
                 return {
-                    naam: ''
+                    honden: [
+   		                {naam: "Rolf"},
+   		                {naam: "Bruto"},
+   		                {naam: "Kaizer"},
+   		                {naam: "Kazan"}
+                     ]
+
                 }
             }
 

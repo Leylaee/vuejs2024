@@ -10,10 +10,13 @@
 
 <body>
     <div id="app">
+        <input v-model="newPerson">
+        <button v-on:click="addPerson()">Voeg toe</button>
 
-        <p>Geef je naam aub.</p>
-        <input v-model="naam" size="50">
-        <p>Hallo {{naam}}</p>
+        <li v-for="persoon in personen">
+                    {{persoon}}
+        </li>
+
 
     </div>
 
@@ -23,7 +26,14 @@
 
             data() {
                 return {
-                    naam: ''
+                    personen: [],
+                    newPerson: ''
+                }
+            },
+            method: {
+                addPerson: function()  {
+                    return this.personen.push(newPerson);
+                    this.newPerson = '';
                 }
             }
 

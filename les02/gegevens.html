@@ -10,10 +10,11 @@
 
 <body>
     <div id="app">
+        <p>{{voornaam }}</p>
+        <p>{{achternaam}}</p>
+        <p>{{mijnDetals()}}</p>
 
-        <p>Geef je naam aub.</p>
-        <input v-model="naam" size="50">
-        <p>Hallo {{naam}}</p>
+
 
     </div>
 
@@ -23,7 +24,14 @@
 
             data() {
                 return {
-                    naam: ''
+                    voornaam : 'Ronny',
+                    achternaam : 'Renders',
+                    land : 'België'
+                }
+            },
+            methods: {
+                mijnDetals: function() {
+                    return `Ik ben ${this.voornaam} ${this.achternaam} uit ${this.land}.`;
                 }
             }
 

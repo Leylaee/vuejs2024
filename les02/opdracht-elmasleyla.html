@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .red{
+            color: red;
+        }
+        .green{
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+            <h1 v-html="titel"></h1>
+        
+            <div v-for="magazine in magazines">
+                <h2 v-if="magazine.doelgroep.length > 0 && magazine.prijs !== ''" class="green">{{ magazine.naam}}</h2>
+                <h2 v-else class="red">{{magazine.naam}}</h2>
+                <p v-if="magazine.doelgroep.length > 0">Doelgroep: {{magazine.doelgroep}}</p>
+                <p v-else class="red">De doelgroep ontbreekt!</p>
+                <p v-if="magazine.prijs !== ''">Kostprijs los nummer: {{magazine.prijs}}</p>
+                <p v-else class="red">De prijs ontbreekt!</p> 
+            </div>
+            <div>
+                <label for="naam">Naam:</label>
+                <input type="text" v-model="newMagazine.naam">
+                <label for="doelgroep">Doelgroep:</label>
+                <input type="text" v-model="newMagazine.doelgroep">
+                <label for="prijs">Prijs:</label>
+                <input type="text" v-model="newMagazine.prijs">
+                <button v-on:click="addMagazine()">Voeg toe</button>
+
+            </div>
+    </div>
+
+
+    <script>
+        const app = {
+
+            data() {
+                return {
+                    titel: "<i>Magazines</i>",
+                    magazines: [
+                    {naam: "Libelle", doelgroep: "vrouwen",prijs: 4.75},
+                    {naam: "Knack", doelgroep: "",prijs: 6.25},
+                    {naam: "Humo", doelgroep: "gemengd",prijs: ""}
+                    ],
+                    newMagazine: {
+                        naam : '',
+                        doelgroep: '',
+                        prijs: ''
+                    }
+                }
+            },
+            methods: {
+            addMagazine: function(){
+                if(this.newMagazine.naam.trim() === ''){
+                    alert('Gelieve een naam in te voeren.');
+                    return;
+                }
+                this.magazines.push({
+                    naam: this.newMagazine.naam,
+                    doelgroep: this.newMagazine.doelgroep,
+                    prijs: this.newMagazine.prijs
+                });
+                this.newMagazine.naam = '';
+                this.newMagazine.doelgroep = '';
+                this.newMagazine.prijs = '';
+                }
+            }
+
+
+        }
+
+
+
+        Vue.createApp(app).mount('#app')
+
+
+    </script>
+
+</body>
+
+</html>
