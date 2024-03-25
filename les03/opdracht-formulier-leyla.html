@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        #form{
+            display: none;
+        }
+        ul li{
+            display: block;
+        }
+        .red{
+            color: red;
+        }
+        .green{
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Nieuwsbrief</h1>
+        <div id="form" v-popup>
+            <p>
+                <label for="voornaam">Voornaam </label>
+                <input type="text" id="voornaam" v-model="voornaam">
+            </p>
+            <p>
+                <label for="achternaam">Achternaam </label>
+                <input type="text" id="achternaam" v-model="achternaam">
+            </p>
+            <p>
+                <label for="email">Emailadres </label>
+                <input type="email" id="email" v-model="email">
+            </p>
+            <label>Ik abonneer mij op volgende nieuwsbrieven:</label><br>
+            
+                <input type="checkbox" id="MT" value="MT" v-model="checkedNews">
+                <label for="MT">Mobiele technology</label><br>
+            
+                <input type="checkbox" id="PS" value="PS" v-model="checkedNews">
+                <label for="PS">PS Games</label><br>
+            
+                <input type="checkbox" id="Webdesign" value="Webdesign" v-model="checkedNews">
+                <label for="Webdesign">Webdesign</label><br>
+            <p>
+                <input type="checkbox" id="gdpr" v-model="gdpr">
+                <label for="gdpr">Ik ga akkoord met het gebruik van mijn gegevens voor de registratie van mijn account.</label>
+            </p>
+
+            <button type="submit" v-on:click="validateForm()">Verzend</button>
+            <span v-if="errors.length > 0" :class="red">
+                <ul>
+                    <li v-for="error in errors">{{error}}</li>
+                </ul>
+                
+            </span>
+            <span v-else class="green">
+                <p>
+                    {{succes}}
+                </p>
+                </span>
+        </div>
+    </div>
+
+
+    <script>
+        const app =  Vue.createApp({
+
+            data() {
+                return {
+                   voornaam: "",
+                   achternaam: "",
+                   email: "",
+                   nieuwsbrieven: [],
+                   gdpr: false,
+                   errors: [],
+                   succes: ""
+                }
+            }, 
+
+         methods: {
+            validateForm(){
+            this.errors = [];
+            if(this.voornaam === "") {
+                    this.errors.push("Geef de voornaam in aub.");
+            }
+            if(this.achternaam === "") {
+                    this.errors.push("Geef de achternaam in aub.");
+            }
+            if(this.email === "") {
+                    this.errors.push("Geef het emailadres in aub.");
+            }
+            if(!this.checkedNews ){
+                     this.errors.push("Geef minstens 1 keuze op aub");                    
+            }
+            if(!this.gdpr){
+                      this.errors.push("Ga akkoord met de GDPR voorwaarde om het formulier te kunnen versturen.");
+                
+            }
+            
+            
+            if(this.errors.length === 0){
+                this.succes ="Uw aanmelding is verstuurd.";
+            }
+            }
+
+            }
+        });
+         
+        app.directive('popup', {
+            mounted: function(el, binding){
+                el.style.display = 'block';
+                        }
+        });
+
+
+
+        app.mount('#app');
+
+
+    </script>
+
+</body>
+
+</html>
