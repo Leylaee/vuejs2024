@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body,
+        html {
+            font-family: verdana, sans-serif;
+            color: #666;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+
+        header {
+            background: #770000;
+            padding: 20px 60px;
+            margin: 0;
+            color: #ffeedd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #cookies,
+        #inhoud {
+            padding: 20px 30px;
+        }
+
+        a {
+            color: #ffeedd;
+        }
+
+        #cookies {
+            background-color: orange
+        }
+
+        #nieuwe-items {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .item {
+            border: 2px solid #ccc;
+            width: 300px;
+            background-color: #fff;
+            text-align: center;
+            height: 550px
+        }
+
+        .besteld {
+            position: relative;
+            top: -250px;
+            color: white;
+            font-size: 29px;
+            background: green
+        }
+
+        .item-img {
+            width: 300px;
+            height: 300px;
+            background-color: #ddd;
+        }
+
+        .item-img img {
+            cursor: pointer;
+        }
+
+        .item-body {
+            padding: 25px;
+            color: #789;
+        }
+
+        .item-body h4 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .item-body .prijs {
+            font-size: 2em;
+            color: #009900;
+            margin-bottom: 25px;
+        }
+
+        .knop {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #009900;
+            color: #ffffff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            letter-spacing: 1px;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header">
+            <h1>Superhero store</h1>
+            <h5>Your break from the office life!</h5>
+        </header>
+        <section id="cookies">
+            <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                deze cookies.</p>
+            <input type="checkbox">Deze melding niet meer tonen.
+        </section>
+        <section id="inhoud">
+            <h4>Nieuwe items</h4>
+            <section id="nieuwe-items">
+                <div class='item' v-for='iten in items'>
+                    <div class='item-img'>
+                        <img src='{{images}}'v-on:click='toonGroteFoto(item.pathBig)'>
+                    </div>
+                    <div class='item-body'>
+                        <div class='prijs'>29.99€</div>
+                        <h4>Superman hondenpak</h4>
+                        <p>Neem je hond mee als sidekick op al je avonturen!</p>
+                        <a href='#' class='knop'>BESTEL</a>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+    <script type="text/javascript">
+            const app = {
+                    data: function () {
+                        return {
+                        titel: '',
+                        subtitel: '',
+                        items: [
+                            {
+                            id:1, 
+                            naam: 'Wonder Woman', 
+                            omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!',
+                            prijs: 34.99,
+                            afbeeldingSrc: 'images\small\gabriela-braga-CVEWeDNsJP4-unsplash.jpg'},
+                            {
+                            id:2, 
+                            naam: 'Spiderman masker',
+                            omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!',
+                            prijs: 14.99, 
+                            afbeeldingSrc: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg'}
+                        ],
+                        pathSmall:'images\small',
+                        pathBig:'images\big'
+
+                        }
+                    },
+                    methods: {
+                        toonGroteFoto: function(path){
+                            window.open(path, _blank);
+                        }
+                    }
+            }
+
+            Vue.createApp(app).mount('#app')
+
+    </script>
+</body>
+
+</html>
