@@ -20,6 +20,10 @@
             color: #ffeedd;
             border-bottom: 1px solid #ddd;
         }
+        header p {
+            display: flex;
+            justify-content: flex-end;
+        }
 
         #cookies,
         #inhoud {
@@ -102,24 +106,26 @@
         <header id="main-header">
             <h1>Superhero store</h1>
             <h5>Your break from the office life!</h5>
+            <p>Items in winkelwagen: {{aantalInWinkelwagen}} </p>
         </header>
-        <section id="cookies">
+        <section id="cookies" v-if="showCookieMelding">
             <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
                 deze cookies.</p>
-            <input type="checkbox">Deze melding niet meer tonen.
+            <input type="checkbox" v-on:change="check()">Deze melding niet meer tonen.
         </section>
         <section id="inhoud">
             <h4>Nieuwe items</h4>
             <section id="nieuwe-items">
-                <div class='item' v-for='iten in items'>
+                <div class='item' v-for="(item,index) in items">
                     <div class='item-img'>
-                        <img src='{{images}}'v-on:click='toonGroteFoto(item.pathBig)'>
+                        <img :src="pathSmall + item.afbeeldingSrc" v-on:click='toonGroteFoto(pathBig + item.afbeeldingSrc)'>
                     </div>
                     <div class='item-body'>
-                        <div class='prijs'>29.99€</div>
-                        <h4>Superman hondenpak</h4>
-                        <p>Neem je hond mee als sidekick op al je avonturen!</p>
-                        <a href='#' class='knop'>BESTEL</a>
+                        <div class='prijs'>{{item.prijs}}€</div>
+                        <h4>{{item.naam}}</h4>
+                        <p>{{item.omschrijving}}</p>
+                        <a href='#' class='knop' v-on:click.prevent="VoegToeAanWinkelwagen(index)">BESTEL</a>
+                        <div v-if="item.besteld > 0" class="besteld">{{item.besteld}}</div>
                     </div>
                 </div>
             </section>
@@ -134,26 +140,73 @@
                         items: [
                             {
                             id:1, 
+                            naam: 'hondenpak superman',
+                            omschrijving: 'Neem je hond mee als sidekick op al je avonturen!',
+                            prijs: 29.99, 
+                            afbeeldingSrc: 'elias-castillo-7-ToFEHzMNw-unsplash.jpg',
+                            besteld: 0
+                            },
+                            {
+                            id:2, 
                             naam: 'Wonder Woman', 
                             omschrijving: 'Laat de kleine meid tonen hoe speciaal ze is!',
                             prijs: 34.99,
-                            afbeeldingSrc: 'images\small\gabriela-braga-CVEWeDNsJP4-unsplash.jpg'},
+                            afbeeldingSrc: 'gabriela-braga-CVEWeDNsJP4-unsplash.jpg',
+                            besteld: 0
+                            },
                             {
-                            id:2, 
+                            id:3, 
                             naam: 'Spiderman masker',
                             omschrijving: 'Je wil niet altijd dat je herkent wordt voor je goede daden!',
                             prijs: 14.99, 
-                            afbeeldingSrc: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg'}
+                            afbeeldingSrc: 'joey-nicotra-0EI_4R2r0qg-unsplash.jpg',
+                            besteld: 0
+                            }
                         ],
-                        pathSmall:'images\small',
-                        pathBig:'images\big'
-
+                        pathSmall:'images/small/',
+                        pathBig:'images/big/',
+                        showCookieMelding: true,
+                        winkelwagen : [],
+                        aantalInWinkelwagen: ''
                         }
                     },
                     methods: {
                         toonGroteFoto: function(path){
-                            window.open(path, _blank);
+                            window.open(path);
+                        },
+                        check: function() {
+                            this.showCookieMelding = false;
+                            localStorage.setItem('showCookieMelding', JSON.stringify(this.showCookieMelding));
+                        },
+                        VoegToeAanWinkelwagen: function(index) {
+                            this.items[index].besteld++;
+                            this.saveLocalStorageWinkelwagen();
+                        },
+                        saveLocalStorageWinkelwagen: function() {
+                            let temp = this.items.filter((item) => item.besteld !== 0);
+                            localStorage.setItem('winkelwagen', JSON.stringify(this.winkelwagen));
+
                         }
+                    },
+                    mounted() {
+                        if(localStorage.getItem("showCookieMelding")){
+                                this.showCookieMelding = JSON.parse(localStorage.getItem("showCookieMelding"))
+                        }
+                        if (localStorage.getItem("winkelwagen")) {
+                                let tempLs = JSON.parse(localStorage.getItem("winkelwagen"));
+                                //alle items in LS overlopen
+                                //find in de data overeenkomstig item:
+                                //update item in data met besteld uit item van LS
+                                //update aantalInWinkelwagen
+                                    tempLs.forEach((itemInLs) => {
+                                        let gevondenItemInData = this.items.find(itemInData => itemInData.id == itemInLs.id);
+                                    if (gevondenItemInData) {
+                                        gevondenItemInData.besteld = itemInLs.besteld
+                                        this.aantalInWinkelwagen += (itemInLs.besteld)
+                                        }
+                                    })		}
+                        
+
                     }
             }
 
