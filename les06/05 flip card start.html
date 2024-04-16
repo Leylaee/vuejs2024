@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        #app {
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            width: 350px;
+            height: 250px;
+            background-color: grey;
+        }
+
+        .cardBack {
+            height: 300px;
+        }
+
+        h1,
+        h2 {
+            color: white;
+            text-align: center;
+        }
+
+        h2 {
+            background-color: black;
+            margin-top: 0;
+        }
+
+        .form {
+            padding-top: 25px;
+            padding-right: 5px;
+            width: 320px;
+            height: 130px;
+            background-color: black;
+            margin: auto;
+            color: white;
+            text-align: right
+        }
+
+        .form2 {
+            padding-top: 5px;
+            height: 200px;
+        }
+
+        .footer {
+            margin-top: 10px;
+            margin-right: 15px;
+            text-align: right;
+        }
+
+        .card-enter-from,
+        .card-leave-to {
+            opacity: 0;
+            transform: rotateY(90deg);
+        }
+
+        .card-enter-active,
+        .card-leave-active {
+            transition: all 0.5s;
+        }
+
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js""></script>
+</head>
+
+<body>
+    <div id="app">
+        <transition name="card" mode="out-in">
+            <div class="card" v-if="front == true" key="front">
+                <h2>Log In</h2>
+            <div class="form">
+                <p>Naam: <input type="text" name=""></p>
+                <p>Wachtwoord: <input type="text" name=""></p>
+                <p><button>Verzend</button></p>
+            </div>
+            <div class="footer">
+            <span>Nog geen lid?</span>
+            <button @click="front = false">Maak een account aan
+            </button>
+            </div>
+
+            </div>
+            <div class="card cardBack" v-else key="back">
+                <h2>Account aanmaken</h2>
+                <div class="form form2">
+                    <p>Naam: <input type="text" name=""></p>
+                    <p>Email: <input type="text" name=""></p>
+                    <p>Wachtwoord: <input type="text" name=""></p>
+                    <p>Bevestig Wachtwoord: <input type="text" name=""></p>
+                    <p><button>Verzend</button></p>
+                </div>
+                <div class="footer">
+                    <span>Al lid?</span>
+                    <button @click="front = true">Log In</button>
+                </div>
+                
+            </div>
+        </transition>
+        
+
+    </div>
+    <script type="text/javascript">
+        const app = {
+            data: function () {
+                return {
+                    front: true
+                }
+            }
+        }
+
+        Vue.createApp(app).mount('#app')
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .list-enter-active {
+            animation: add-item 1s;
+        }
+        .list-leave-active {
+            position: absolute;
+            animation: add-item 1s reverse;
+        }
+        .list-move {
+            transition: transform 2s;
+        }
+        li {
+            cursor: pointer;
+        }
+        @keyframes add-item {
+        0% {
+            opacity: 0;
+            transform: translateX(150px);
+        }
+        50% {
+            opacity: 0.5;
+            transform: translateX(-10px) skewX(20deg);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0px);
+        }
+}
+
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h4>{{ name }}'s To Do List</h4>
+            <div>
+                <input v-model="newItemText" />
+                <button v-on:click="addNewTodo">Add</button>
+                <transition-group name="list" tag="ul">      
+                <li v-for="(task,index) in tasks" v-bind:key="task" v-on:click="removeTodo(index)">{{ task }}
+                </li>
+                </transition-group>
+            </div>
+    </div>
+
+
+    <script>
+        const app = {
+
+            data() {
+                return {
+                    name: "Vue.js",
+                    tasks: ['Write code', 'Go for a walk', 'Eat', 'Sleep'],
+                    newItemText: ""
+                }
+            },
+
+            methods: {
+                addNewTodo() {
+                    if (this.newItemText != "") {
+                        this.tasks.push(this.newItemText);
+                    }
+                    this.newItemText = "";
+                },
+                removeTodo(index) {
+                    this.tasks.splice(index, 1);
+                }
+            }
+
+
+
+        }
+
+
+
+        Vue.createApp(app).mount('#app')
+
+
+    </script>
+
+</body>
+
+</html>
