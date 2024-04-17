@@ -142,56 +142,121 @@
             transform: translateX(0px);
             
         }
-
-
+   
     </style>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
+
 
 
 </head>
 
 <body>
     <div id="app">
-        <header id="main-header">
-            <h1>{{titel}}</h1>
-            <h5>{{subtitel}}</h5>
-            <transition name="winkelwagen-fade">
-                <div id="winkelwagen-melding" v-if="showWinkelwagen">
-                <p>Items in <a href="winkelwagen.html"> winkelwagen </a>: {{aantalInWinkelwagen}} </p>
-                </div>
-            </transition>
-        </header>
-        <transition name="cookie-fade">
-        <section id="cookies" v-if="showCookieMelding">
-            <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
-                deze cookies.</p>
-            <input type="checkbox" v-on:change="check()">Deze melding niet meer tonen.
-        </section>
-        </transition>
-        
-        <section id="inhoud">
-            <h4>Nieuwe items</h4>
-            <section id="nieuwe-items">
-                <div class='item' v-for="(item,index) in items">
-                    <div class='item-img'>
-                        <img :src="pathSmall + item.afbeeldingSrc" v-on:click='toonGroteFoto(pathBig + item.afbeeldingSrc)'>
-                    </div>
-                    <div class='item-body'>
-                        <div class='prijs'>{{item.prijs}}€</div>
-                        <h4>{{item.naam}}</h4>
-                        <p>{{item.omschrijving}}</p>
-                        <transition name="knop-appear" appear>
-                            <div :key="item.id">
-                                <a href='#' class='knop' v-on:click.prevent="VoegToeAanWinkelwagen(index)">BESTEL</a>
-                                <div v-if="item.besteld > 0" class="besteld">{{item.besteld}}</div>
-                            </div>    
-                        </transition>
-                    </div>
-                </div>
-            </section>
-        </section>
     </div>
+    <script type="text/x-template" id="homeTemplate">
+        <div>
+            <header id="main-header">
+                <h1>{{titel}}</h1>
+                <h5>{{subtitel}}</h5>
+                <transition name="winkelwagen-fade">
+                    <div id="winkelwagen-melding" v-if="showWinkelwagen">
+                        <transition-group name="winkelwagen-fade">
+                    <p>Items in <router-link class="router-link" to="/winkelwagen">winkelwagen</router-link> : {{aantalInWinkelwagen}} </p>
+                    </transition-group>
+                    </div>
+                </transition>
+            </header>
+            <transition name="cookie-fade">
+            <section id="cookies" v-if="showCookieMelding">
+                <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                    deze cookies.</p>
+                <input type="checkbox" v-on:change="check()">Deze melding niet meer tonen.
+            </section>
+            </transition>
+            
+            <section id="inhoud">
+                <h4>Nieuwe items</h4>
+                <section id="nieuwe-items">
+                    <div class='item' v-for="(item,index) in items">
+                        <div class='item-img'>
+                            <img :src="pathSmall + item.afbeeldingSrc" v-on:click='toonGroteFoto(pathBig + item.afbeeldingSrc)'>
+                        </div>
+                        <div class='item-body'>
+                            <div class='prijs'>{{item.prijs}}€</div>
+                            <h4>{{item.naam}}</h4>
+                            <p>{{item.omschrijving}}</p>
+                            <transition name="knop-appear" appear>
+                                <div :key="item.id">
+                                    <a href='#' class='knop' v-on:click.prevent="VoegToeAanWinkelwagen(index)">BESTEL</a>
+                                    <div v-if="item.besteld > 0" class="besteld">{{item.besteld}}</div>
+                                </div>    
+                            </transition>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="winkelwagenTemplate">
+        <div>
+            <header id="main-header">
+                <h1>  <router-link class="router-link" to="/">{{titel}}</router-link></h1>
+                <h5>{{subtitel}}</h5>
+                <p id="winkelwagen">Items in winkelwagen: {{totaalAantalItems}}</p>
+            </header>
+            <section id="cookies" v-if="showCookieMelding">
+                <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                    deze cookies.</p>
+                <input type="checkbox" v-on:change="check()">Deze melding niet meer tonen.
+            </section>
+            <section id="inhoud">
+                <h4>Gekozen items</h4>
+                <section id="nieuwe-items">
+                    <transition name="itemTransition" tag="div">
+                    <div v-if="items.length > 0" >
+                        <transition-group name="itemTransition" tag="div">
+                        <div class="item" v-for="(item,index) in items" :key="item.id">
+                            <div class="item-img">
+                                  <img :src="pathSmall + item.afbeeldingSrc">
+                            </div>
+                            <div class="item-body">
+                                <div class="prijs">{{item.prijs}}€</div>
+                                <h4>{{item.naam}}</h4>
+                                <p>{{item.omschrijving}}</p>
+                                <input type="number" size="2" v-model="item.besteld" v-o,:change="aantalAanpassing(index)">
+                                <a href="#" class="knop" v-on:click="verwijder(index)">verwijder</a>
+                            </div>
+                        </div>
+                        </transition-group>
+                        </div>
+                        <div v-else>
+                            <p>Geen items</p>
+                        </div>
+                     </transition>
+                    
+                    <div>
+                        <p class="totaal">Totaal: {{totalePrijs}} </p>
+                    </div>
+                    
+            </section>
+        </div>
+    </script>
+
     <script type="text/javascript">
+            const router = new VueRouter.createRouter({
+                history: VueRouter.createWebHashHistory(),
+                routes: [
+   		        { path: '/', component: home },
+                { path: '/winkelwagen', component: winkelwagen}
+             ]
+             })
+
+
+
+
+
             const app = {
                     data: function () {
                         return {
@@ -226,7 +291,6 @@
                         pathSmall:'images/small/',
                         pathBig:'images/big/',
                         showCookieMelding: true,
-                        winkelwagen : [],
                         aantalInWinkelwagen: 0,
                         showWinkelwagen: true
                         }
@@ -239,22 +303,11 @@
                             this.showCookieMelding = false;
                             localStorage.setItem('showCookieMelding', JSON.stringify(this.showCookieMelding));
                         },
-                        VoegToeAanWinkelwagen: function(index) {
-                            this.items[index].besteld++;
-                            this.aantalInWinkelwagen++;
-                            this.saveLocalStorageWinkelwagen();
-                            this.toonWinkelwagenMelding();
-                        },
                         saveLocalStorageWinkelwagen: function() {
                             let temp = this.items.filter((item) => item.besteld !== 0);
                             localStorage.setItem('winkelwagen', JSON.stringify(temp));
                         },
-                        toonWinkelwagenMelding : function() {
-                            this.showWinkelwagen = false;
-                            setTimeout(function(scope) {
-                                scope.showWinkelwagen = true;
-                            }, 100,this);
-                        }
+                   
                     },
                     mounted() {
                         if(localStorage.getItem("showCookieMelding")){
@@ -279,9 +332,12 @@
                     }
             }
 
-            Vue.createApp(app).mount('#app')
+            Vue.createApp(app).use(router).mount('#app')
 
     </script>
+    <script src="home.js"></script>
+    <script src="winkelwagen.js"></script>
+
 </body>
 
 </html>
