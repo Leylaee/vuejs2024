@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h3>{{titel}}</h3>
+        <card titel="Klant fiche"  v-for="klant in klanten" v-bind:id="klant.id" v-bind:naam="klant.naam" v-bind:key="klant.id"></card>
+    
+
+    </div>
+    <script type="text/x-template" id="card-template">
+        <div>
+            <p>{{id}}</p>
+            <p>{{naam}}</p>
+        </div>
+    </script>
+
+
+    <script>
+        const app = Vue.createApp({
+                data: function () {
+                    return {
+                        klanten: [
+            	            { id: 1, naam: 'Jan Jansen' },
+            	            { id: 2, naam: 'Jan Jans' },
+            	            { id: 3, naam: 'Jan Janssen' }
+        	            ],
+                        titel:"Klanten fiche"
+                    }
+                }
+        })
+
+        app.component('card', {
+                data: function () {
+                    return {
+                            
+                    }
+                },
+                props: ['titel', 'naam','id'],
+                template: '#card-template'
+        })
+        
+        app.mount('#app')
+
+
+    </script>
+
+</body>
+
+</html>

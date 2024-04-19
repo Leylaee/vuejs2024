@@ -14,6 +14,7 @@ const winkelwagen = {
             window.open(path);
         },
         verwijder: function(index) {
+            event.preventDefault();
             this.items = this.items.filter((item,indx) => indx !== index)
             this.saveLocalStorageWinkelwagen();
         } ,

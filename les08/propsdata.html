@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- It is recommended to provide a key attribute with v-for whenever possible -->
+            <blog-post v-for="post in posts" v-bind:id="post.id" v-bind:title="post.title" v-bind:key="post.id"></blog-post>
+    </div>
+        
+    <script type="text/x-template" id="blog-postTemplate">
+        <h3>{{id}}-{{title}}</h3>
+    </script>
+    
+
+
+    <script>
+        const app = Vue.createApp({
+                data: function () {
+                    return {
+                        posts: [
+                { id: 1, title: 'Mijn reis met Vue' },
+                { id: 2, title: 'Bloggen met Vue' },
+                { id: 3, title: 'Waarom Vue zo leuk is' }
+                ]
+
+                    
+                    }
+                }
+        })
+
+                app.component('blog-post', {
+                props: ['id', 'title'],
+                template: '#blog-postTemplate'
+                })
+
+                app.mount('#app')
+
+
+    </script>
+
+</body>
+
+</html>

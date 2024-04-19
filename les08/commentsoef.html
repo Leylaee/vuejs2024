@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+            <img src=" https://source.unsplash.com/user/erondu/800x600" v-for="comment in comments" v-bind:id="comment.id" v-bind:key="comment.id">
+        
+    </div>
+        
+    <script type="text/x-template" id="faceTemplate">
+        <ul>
+            <li>
+        </ul>
+    </script>
+    
+
+
+    <script>
+        const app = Vue.createApp({
+                data: function () {
+                    return {
+                        comments: [
+                        	{ id: 1, user:'Jan', userlink:'http://www.facebook.com', msg: 'Like!' },
+	                        { id: 2, user:'Piet', userlink:'http://www.facebook.com',msg: 'I love this' },
+	                        { id: 3, user:'Mies', userlink:'http://www.facebook.com',msg: 'Waar is dit genomen?' }	]
+
+                    
+                    }
+                }
+        })
+
+                app.component('img', {
+                props: ['id', 'title'],
+                template: '#faceTemplate'
+                })
+
+                app.mount('#app')
+
+
+    </script>
+
+</body>
+
+</html>
