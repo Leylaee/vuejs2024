@@ -245,11 +245,7 @@
             </nav>
 
         </header>
-
         <cookiemelding></cookiemelding>
-        <item v-for="item in items" v-bind:item="item" v-bind:key="item.id"></item>
-
-        
         <router-view></router-view>
 
     </div>
@@ -260,8 +256,7 @@
             <section id="inhoud">
                 <h4>Nieuwe items</h4>
                 <section id="nieuwe-items">
-                    {{item}}
-            
+                  <item v-for="item in items" v-bind:item="item" v-bind:pathSmall="pathSmall" v-bind:besteld="item.besteld" v-bind:key="item.id" v-on:voeg-toe="VoegToeAanWinkelwagen(item)" v-on:toon-groot="toonGroteFoto(pathBig + item.afbeeldingSrc)"></item>
                 </section>
             </section>
         </div>
@@ -313,9 +308,9 @@
     </script>
 
     <script type="text/x-template" id="item-template">
-        <div class='item' v-for="(item,index) in items"> 
+        <div class='item'> 
             <div class='item-img'>
-                <img :src="pathSmall + item.afbeeldingSrc" v-on:click='toonGroteFoto(pathBig + item.afbeeldingSrc)'>
+                <img :src="pathSmall + item.afbeeldingSrc" v-on:click="$emit('toon-groot',pathBig + item.afbeeldingSrc)">
             </div>
             <div class='item-body'>
                 <div class='prijs'>{{item.prijs}}€</div>
@@ -323,8 +318,8 @@
                 <p>{{item.omschrijving}}</p>
                 <transition name="knop-appear" appear>
                     <div :key="item.id">
-                        <a href='#' class='knop' v-on:click.prevent="VoegToeAanWinkelwagen(index)">BESTEL</a>
-                        <div v-if="item.besteld > 0" class="besteld">{{item.besteld}}</div>
+                        <a href='#' class='knop' v-on:click.prevent="$emit('voeg-toe',item)">BESTEL</a>
+                        <div v-if="besteld > 0" class="besteld">{{item.besteld}}</div>
                     </div>    
                 </transition>
             </div>
@@ -353,6 +348,7 @@
                         subtitel: "Your break from the office life!",
                         aantalInWinkelwagen: 0,
                         showWinkelwagen: true,
+                        items:[]
                         }
                     },
 
@@ -384,7 +380,7 @@
 
                     }
                 },
-                props: ['item'],
+                props: ['item', 'pathSmall', 'besteld'],
                 template: '#item-template'
             })
             

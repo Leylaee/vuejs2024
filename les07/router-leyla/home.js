@@ -39,8 +39,8 @@ const home = {
         toonGroteFoto: function(path){
             window.open(path);
         },
-        VoegToeAanWinkelwagen: function(index) {
-            this.items[index].besteld++;
+        VoegToeAanWinkelwagen: function(item) {
+            item.besteld++;
             this.$root.aantalInWinkelwagen++;
             this.saveLocalStorageWinkelwagen();
             this.toonWinkelwagenMelding();
