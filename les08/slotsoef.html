@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body{
+            margin: 0;
+        }
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: lightgray;
+           
+        }
+        .container div{
+            padding: 50px;
+        }
+        h1{
+            color: white;
+        }
+        #social {
+            display:flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    
+        <mijn-header>
+            <slot>
+                
+            </slot>
+        </mijn-header>
+        <mijn-header>
+            
+            <template v-slot:logo>
+                <img src="afbeeldingen oefening slots/logo2.png"> 
+            </template>
+            <template v-slot:bedrijf><h1>Mijn bedrijf</h1></template>
+            <template v-slot:social>
+                <a href="#"><img src="afbeeldingen oefening slots/facebook.png"></a>
+                <a href="#"><img src="afbeeldingen oefening slots/instagram.png"></a>
+                <a href="#"><img src="afbeeldingen oefening slots/youtube.png"></a>
+
+            </template>
+        </mijn-header>
+    </div>
+
+
+    <script type="text/x-template" id="baseTemplate">
+        <div class="container">
+            <div>
+                <slot name="logo">
+                    <img src="afbeeldingen oefening slots/logo.png">
+                </slot>
+            </div>
+            <div>
+                <slot name="bedrijf">
+                    <h1>Bedrijfsnaam</h1>
+                </slot>
+            </div>
+            <div id="social">
+                <slot name="social">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Youtube</a>
+                </slot>
+        </div>
+    </script>
+
+
+
+
+    <script>
+        const app = Vue.createApp({
+                data: function () {
+                    return {}
+                }
+        })
+        
+        app.component('mijn-header', {
+                data: function () {
+                    return {}
+                },
+                template: '#baseTemplate'
+        })
+
+        app.mount('#app')
+
+
+    </script>
+
+</body>
+
+</html>

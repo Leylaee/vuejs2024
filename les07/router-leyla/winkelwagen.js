@@ -56,7 +56,7 @@ const winkelwagen = {
     },
     watch: {
         totaalAantalItems(newValue) {
-        this.$root.aantalInWinkelwagen = newValue
+        this.$root.totalItemsInCar = newValue
        }
      },
     mounted()  {

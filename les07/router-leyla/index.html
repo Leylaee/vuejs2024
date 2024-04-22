@@ -245,13 +245,10 @@
             </nav>
 
         </header>
-        <transition name="cookie-fade">
-            <section id="cookies" v-if="showCookieMelding">
-                <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
-                    deze cookies.</p>
-                <input type="checkbox" v-on:change="check()">Deze melding niet meer tonen.
-            </section>
-            </transition>
+
+        <cookiemelding></cookiemelding>
+        <item></item>
+        
         
         <router-view></router-view>
     </div>
@@ -319,6 +316,15 @@
             </section>
         </div>
     </script>
+    <script type="text/x-template" id="cookie-template">
+        <transition name="cookie-fade">
+            <section id="cookies" v-if="showCookieMelding">
+                <p>Deze site maakt gebruik van cookies. Door de site verder te gebruiken stem je toe met het gebruik van
+                    deze cookies.</p>
+                <input type="checkbox" v-on:change="check()">Deze melding niet meer tonen.
+            </section>
+        </transition>`
+    </script>
 
     
     
@@ -335,38 +341,51 @@
              ]
              })
 
-            const app = {
+            const app = Vue.createApp({
                     data: function () {
                         return {
                         titel: "Superhero store",
                         subtitel: "Your break from the office life!",
-                        showCookieMelding: true,
+                      //  showCookieMelding: true,
                         aantalInWinkelwagen: 0,
                         showWinkelwagen: true,
                         items: []
                         }
                     },
                     methods: {
-                       check: function() {
+                        check: function() {
                             this.showCookieMelding = false;
                             localStorage.setItem('showCookieMelding', JSON.stringify(this.showCookieMelding));
                         },
-                    
-                       
-                   
                     },
                     mounted() {
                         if(localStorage.getItem("showCookieMelding")){
                                 this.showCookieMelding = JSON.parse(localStorage.getItem("showCookieMelding"))
                         }
-                        
-                     
-                        
-
                     }
-            }
 
-            Vue.createApp(app).use(router).mount('#app')
+                    
+            })
+            app.component('cookiemelding', {
+                    data: function () {
+                        return {
+                        
+                        }
+                    },
+                    template: '#cookie-template',
+                    methods: {
+                        check() {
+                            this.$emit('update:show', false)
+                        }
+                    },
+                    props: ['showCookieMelding']
+            })
+
+            
+            
+            
+            
+            app.use(router).mount('#app')
 
     </script>
   
