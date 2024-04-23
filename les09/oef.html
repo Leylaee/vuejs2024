@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <h1>Github User Profiles</h1>
+        <githubprofiles :usernma="username"></githubprofiles>
+
+    </div>
+    <script type="text/x-template" id="github-user-profile">
+        <div>
+            
+        </div>
+    </script>
+
+
+    <script>
+        const app = Vue.createApp({
+                data: function () {
+                    return {
+                      username:"dannydrij"
+                    }
+                }
+        })
+
+        app.component('githubprofiles', {
+                data: function () {
+                    return {
+                        user:{}
+                           
+                    }
+                },
+                props: ['username'],
+                template: '#github-user-profile',
+                mounted() {
+                    axios.get('https://api.github.com/users/dannydrij')
+                    .then(response => (this.user = response.data))
+                }
+        })
+        
+        app.mount('#app')
+
+
+    </script>
+
+</body>
+
+</html>
