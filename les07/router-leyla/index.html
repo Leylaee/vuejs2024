@@ -27,7 +27,7 @@
         }
         .router-link{
             text-decoration: none;
-            padding-left: 5px;
+            padding-left: 60px;
         }
 
         #cookies,
@@ -219,10 +219,14 @@
             transform: translateX(0px);
             opacity: 1;
         }
+
+        .comments{
+            padding: 20px;
+        }
     </style>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/vue-router@4"></script>
-
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
 
 
 </head>
@@ -242,7 +246,11 @@
             <nav>
                 <router-link class="router-link" to="/">Home</router-link>
                 <router-link class="router-link" to="/winkelwagen">Winkelwagen</router-link>
+                <router-link class="router-link" to="/comments">Comments</router-link>
             </nav>
+        
+
+        
 
         </header>
         <cookiemelding></cookiemelding>
@@ -251,8 +259,7 @@
     </div>
 
     <script type="text/x-template" id="homeTemplate">
-        <div>
-            
+        <div>  
             <section id="inhoud">
                 <h4>Nieuwe items</h4>
                 <section id="nieuwe-items">
@@ -297,6 +304,17 @@
         </div>
     </script>
 
+    <script type="text/x-template" id="commentTemplate">
+     <div id="inhoud">
+        <div v-for="comment in com" :key="comment.id" class="comments">
+            <h2>Comment {{comment.id}}</h2>
+            <p>Naam: {{comment.name}}</p>
+            <p>Email: {{comment.email}}</p>
+            <p>Comment: {{comment.body}}</p>
+        </div>
+     </div>
+    </script>
+
     <script type="text/x-template" id="cookie-template">
         <transition name="cookie-fade">
             <section id="cookies" v-if="showCookieMelding">
@@ -330,17 +348,24 @@
     
     <script src="home.js"></script>
     <script src="winkelwagen.js"></script>
+    <script src="comments.js"></script>
 
     <script type="text/javascript">
-        
+
+          
+
+
             const router = new VueRouter.createRouter({
                 history: VueRouter.createWebHashHistory(),
                 routes: [
                         { path: '/', component: home },
-                        { path: '/winkelwagen', component: winkelwagen}
+                        { path: '/winkelwagen', component: winkelwagen},
+                        { path: '/comments', component: comments}
+
              ]
              })
 
+            
             const app = Vue.createApp({
                     data: function () {
                         return {
@@ -348,12 +373,18 @@
                         subtitel: "Your break from the office life!",
                         aantalInWinkelwagen: 0,
                         showWinkelwagen: true,
-                        items:[]
+                        items:[],
+                        comment: null
+                        
+                        
                         }
-                    },
-
-                    
+                    }, 
+                    mounted() {
+                    axios.get('https://jsonplaceholder.typicode.com/comments?_limit=10')
+                        .then(response => this.comment = response.data)
+                }    
             })
+
             app.component('cookiemelding', {
                     data: function () {
                         return {
@@ -373,10 +404,10 @@
                     },
                     template: '#cookie-template',
             })
+
             app.component('item' , {
                 data:function () {
                     return {
-    
 
                     }
                 },
@@ -384,6 +415,7 @@
                 template: '#item-template'
             })
             
+          
             
             
             
